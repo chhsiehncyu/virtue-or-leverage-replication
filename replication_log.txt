@@ -1,0 +1,570 @@
+=================== model.py
+w^HM = c*(h + 1)/4    w^LM = (c*l**2 + c - 2*l + 2)/4
+pT^HM = -h*(c*h - 2*lambda + 2)/(2*(lambda - 2))
+pI^HM = -(c*h + c - 4*lambda + 4)/(4*(lambda - 2))
+pT^LM = -l*(c*l - 2*lambda + 2)/(2*(lambda - 2))
+pI^LM = -(c*l**2 + c - 2*l - 4*lambda + 6)/(4*(lambda - 2))
+pT^HA = -h*(2*c*h**2*r - 2*c*h**2 + c*lambda - c*r - c - 4*h*lambda*r + 4*h*lambda + 4*h*r - 4*h + 4*lambda*r - 4*lambda - 4*r + 4)/(2*(r - 1)*(2*h*lambda - 4*h - lambda + r + 1))
+pI^HA = -(c*h**2*r - c*h**2 + c*h*lambda - 2*c*h - 2*h*lambda*r + 2*h*lambda + 2*h*r - 2*h + 2*lambda*r - 2*lambda - 2*r + 2)/(2*(r - 1)*(2*h*lambda - 4*h - lambda + r + 1))
+pT^LA = l*(-2*c*l*r + 2*c*l - c*lambda + c*r + c - 2*l*lambda*r + 2*l*lambda + 2*l*r**2 - 2*l + 2*lambda*r - 2*lambda - 2*r**2 + 2)/(2*(r - 1)*(-l*lambda + l*r + l + 2*lambda - 4))
+pI^LA = -(c*l**2*r - c*l**2 + c*lambda - 2*c + 2*l*lambda*r - 2*l*lambda - 4*l*r + 4*l - 2*lambda*r + 2*lambda + 4*r - 4)/(2*(r - 1)*(-l*lambda + l*r + l + 2*lambda - 4))
+
+Table 3 check (baseline):
+HM 0.0 pT=0.9457 pI=0.7013 DT=0.1850 DI=0.1138 piR=0.0995 piI=0.0060 CS=0.0498 TW=0.1553
+HM 0.5 pT=0.8277 pI=0.6017 DT=0.2467 DI=0.1517 piR=0.0885 piI=0.0080 CS=0.0885 TW=0.1849
+HM 1.0 pT=0.5915 pI=0.4025 DT=0.3700 DI=0.2275 piR=0.0000 piI=0.0119 CS=0.1990 TW=0.2110
+HA 0.0 pT=0.7501 pI=0.5072 DT=0.1905 DI=0.3023 piR=0.0609 piI=0.0169 CS=0.1268 TW=0.2046
+HA 0.5 pT=0.7269 pI=0.4983 DT=0.2381 DI=0.2636 piR=0.0585 piI=0.0128 CS=0.1343 TW=0.2057
+HA 1.0 pT=0.6882 pI=0.4834 DT=0.3175 DI=0.1991 piR=0.0499 piI=0.0073 CS=0.1485 TW=0.2058
+LM 0.0 pT=0.5917 pI=0.6834 DT=0.2587 DI=0.0838 piR=0.1063 piI=0.0014 CS=0.0531 TW=0.1608
+LM 0.5 pT=0.4890 pI=0.5778 DT=0.3450 DI=0.1117 piR=0.0945 piI=0.0019 CS=0.0945 TW=0.1908
+LM 1.0 pT=0.2835 pI=0.3668 DT=0.5175 DI=0.1675 piR=0.0000 piI=0.0028 CS=0.2126 TW=0.2154
+LA 0.0 pT=0.3930 pI=0.4652 DT=0.2860 DI=0.2774 piR=0.0571 piI=0.0062 CS=0.1467 TW=0.2099
+LA 0.5 pT=0.3821 pI=0.4598 DT=0.3523 DI=0.2231 piR=0.0553 piI=0.0040 CS=0.1515 TW=0.2107
+LA 1.0 pT=0.3647 pI=0.4511 DT=0.4588 DI=0.1360 piR=0.0495 piI=0.0015 CS=0.1601 TW=0.2111
+
+=================== endog_r.py
+--- HA: dOmega/dr numerator factored ---
+h*(r - 1)*(2*h*lambda - 4*h - lambda + r + 1)*(2*c**2*h**4*lambda*r**3 - 6*c**2*h**4*lambda*r**2 + 6*c**2*h**4*lambda*r - 2*c**2*h**4*lambda - 4*c**2*h**4*r**3 + 12*c**2*h**4*r**2 - 12*c**2*h**4*r + 4*c**2*h**4 - 2*c**2*h**3*lambda**3*r + 2*c**2*h**3*lambda**3 + 12*c**2*h**3*lambda**2*r - 12*c**2*h**3*lambda**2 - 24*c**2*h**3*lambda*r + 24*c**2*h**3*lambda + c**2*h**3*r**4 - 4*c**2*h**3*r**3 + 6*c**2*h**3*r**2 + 12*c**2*h**3*r - 15*c**2*h**3 - 2*c**2*h**2*lambda**4 + 3*c**2*h**2*lambda**3*r + 13*c**2*h**2*lambda**3 - 3*c**2*h**2*lambda**2*r**2 - 12*c**2*h**2*lambda**2*r - 33*c**2*h**2*lambda**2 + c**2*h**2*lambda*r**3 + 9*c**2*h**2*lambda*r**2 + 15*c**2*h**2*lambda*r + 39*c**2*h**2*lambda - 2*c**2*h**2*r**3 - 6*c**2*h**2*r**2 - 6*c**2*h**2*r - 18*c**2*h**2 + c**2*h*lambda**4 - 3*c**2*h*lambda**3*r - 5*c**2*h*lambda**3 + 3*c**2*h*lambda**2*r**2 + 12*c**2*h*lambda**2*r + 9*c**2*h*lambda**2 - c**2*h*lambda*r**3 - 9*c**2*h*lambda*r**2 - 15*c**2*h*lambda*r - 7*c**2*h*lambda + 2*c**2*h*r**3 + 6*c**2*h*r**2 + 6*c**2*h*r + 2*c**2*h - 8*c*h**3*lambda**2*r**3 + 24*c*h**3*lambda**2*r**2 - 24*c*h**3*lambda**2*r + 8*c*h**3*lambda**2 + 24*c*h**3*lambda*r**3 - 72*c*h**3*lambda*r**2 + 72*c*h**3*lambda*r - 24*c*h**3*lambda - 16*c*h**3*r**3 + 48*c*h**3*r**2 - 48*c*h**3*r + 16*c*h**3 - 4*c*h**2*lambda**4*r + 4*c*h**2*lambda**4 + 28*c*h**2*lambda**3*r - 28*c*h**2*lambda**3 + 4*c*h**2*lambda**2*r**3 - 12*c*h**2*lambda**2*r**2 - 60*c*h**2*lambda**2*r + 68*c*h**2*lambda**2 - 4*c*h**2*lambda*r**4 + 4*c*h**2*lambda*r**3 + 12*c*h**2*lambda*r**2 + 60*c*h**2*lambda*r - 72*c*h**2*lambda + 4*c*h**2*r**4 - 8*c*h**2*r**3 - 24*c*h**2*r + 28*c*h**2 + 2*c*h*lambda**4*r - 2*c*h*lambda**4 - 6*c*h*lambda**3*r**2 - 2*c*h*lambda**3*r + 8*c*h*lambda**3 - 2*c*h*lambda**2*r**3 + 36*c*h*lambda**2*r**2 - 30*c*h*lambda**2*r - 4*c*h*lambda**2 + 2*c*h*lambda*r**4 - 2*c*h*lambda*r**3 - 54*c*h*lambda*r**2 + 66*c*h*lambda*r - 12*c*h*lambda - 2*c*h*r**4 + 4*c*h*r**3 + 24*c*h*r**2 - 36*c*h*r + 10*c*h + 8*h**2*lambda**3*r**3 - 24*h**2*lambda**3*r**2 + 24*h**2*lambda**3*r - 8*h**2*lambda**3 - 32*h**2*lambda**2*r**3 + 96*h**2*lambda**2*r**2 - 96*h**2*lambda**2*r + 32*h**2*lambda**2 + 40*h**2*lambda*r**3 - 120*h**2*lambda*r**2 + 120*h**2*lambda*r - 40*h**2*lambda - 16*h**2*r**3 + 48*h**2*r**2 - 48*h**2*r + 16*h**2 - 8*h*lambda**3*r**3 + 24*h*lambda**3*r**2 - 24*h*lambda**3*r + 8*h*lambda**3 + 4*h*lambda**2*r**4 + 16*h*lambda**2*r**3 - 72*h*lambda**2*r**2 + 80*h*lambda**2*r - 28*h*lambda**2 - 8*h*lambda*r**4 - 8*h*lambda*r**3 + 72*h*lambda*r**2 - 88*h*lambda*r + 32*h*lambda + 4*h*r**4 - 24*h*r**2 + 32*h*r - 12*h - 4*lambda**2*r**4 + 16*lambda**2*r**3 - 24*lambda**2*r**2 + 16*lambda**2*r - 4*lambda**2 + 8*lambda*r**4 - 32*lambda*r**3 + 48*lambda*r**2 - 32*lambda*r + 8*lambda - 4*r**4 + 16*r**3 - 24*r**2 + 16*r - 4)
+degree in r of each factor:
+   deg_r = 1  deg_lam = 0  factor: r - 1
+   deg_r = 0  deg_lam = 0  factor: h
+   deg_r = 1  deg_lam = 1  factor: 2*h*lambda - 4*h - lambda + r + 1
+   deg_r = 4  deg_lam = 4  factor: (long)
+den factored: 4*(r - 1)**4*(2*h*lambda - 4*h - lambda + r + 1)**4
+--- LA: dOmega/dr numerator factored ---
+-2*(l - 1)*(-l*lambda + l*r + l + 2*lambda - 4)**2*(-c**2*l**5*lambda*r**3 + 3*c**2*l**5*lambda*r**2 - 3*c**2*l**5*lambda*r + c**2*l**5*lambda + c**2*l**5*r**4 - 2*c**2*l**5*r**3 + 2*c**2*l**5*r - c**2*l**5 + c**2*l**4*lambda*r**3 - 3*c**2*l**4*lambda*r**2 + 3*c**2*l**4*lambda*r - c**2*l**4*lambda - 2*c**2*l**4*r**3 + 6*c**2*l**4*r**2 - 6*c**2*l**4*r + 2*c**2*l**4 + c**2*l**3*lambda**3*r - c**2*l**3*lambda**3 - 3*c**2*l**3*lambda**2*r**2 + 3*c**2*l**3*lambda**2 + c**2*l**3*lambda*r**3 + 9*c**2*l**3*lambda*r**2 - 9*c**2*l**3*lambda*r - c**2*l**3*lambda - 2*c**2*l**3*r**3 - 6*c**2*l**3*r**2 + 10*c**2*l**3*r - 2*c**2*l**3 - 2*c**2*l**2*lambda**3*r + 2*c**2*l**2*lambda**3 + 12*c**2*l**2*lambda**2*r - 12*c**2*l**2*lambda**2 + c**2*l**2*lambda*r**3 - 3*c**2*l**2*lambda*r**2 - 21*c**2*l**2*lambda*r + 23*c**2*l**2*lambda - 2*c**2*l**2*r**3 + 6*c**2*l**2*r**2 + 10*c**2*l**2*r - 14*c**2*l**2 + c**2*l*lambda**4 - 3*c**2*l*lambda**3*r - 5*c**2*l*lambda**3 + 3*c**2*l*lambda**2*r**2 + 12*c**2*l*lambda**2*r + 9*c**2*l*lambda**2 - 12*c**2*l*lambda*r**2 - 12*c**2*l*lambda*r - 8*c**2*l*lambda + 12*c**2*l*r**2 + 4*c**2*l - 2*c**2*lambda**4 + 2*c**2*lambda**3*r + 14*c**2*lambda**3 - 12*c**2*lambda**2*r - 36*c**2*lambda**2 + 24*c**2*lambda*r + 40*c**2*lambda - 16*c**2*r - 16*c**2 - 2*c*l**4*lambda**2*r**3 + 6*c*l**4*lambda**2*r**2 - 6*c*l**4*lambda**2*r + 2*c*l**4*lambda**2 + 2*c*l**4*lambda*r**4 + 2*c*l**4*lambda*r**3 - 18*c*l**4*lambda*r**2 + 22*c*l**4*lambda*r - 8*c*l**4*lambda - 6*c*l**4*r**4 + 12*c*l**4*r**3 - 12*c*l**4*r + 6*c*l**4 + 4*c*l**3*lambda**2*r**3 - 12*c*l**3*lambda**2*r**2 + 12*c*l**3*lambda**2*r - 4*c*l**3*lambda**2 - 4*c*l**3*lambda*r**4 - 4*c*l**3*lambda*r**3 + 36*c*l**3*lambda*r**2 - 44*c*l**3*lambda*r + 16*c*l**3*lambda + 8*c*l**3*r**4 - 8*c*l**3*r**3 - 24*c*l**3*r**2 + 40*c*l**3*r - 16*c*l**3 - 2*c*l**2*lambda**3*r + 2*c*l**2*lambda**3 - 8*c*l**2*lambda**2*r**3 + 30*c*l**2*lambda**2*r**2 - 24*c*l**2*lambda**2*r + 2*c*l**2*lambda**2 + 28*c*l**2*lambda*r**3 - 108*c*l**2*lambda*r**2 + 108*c*l**2*lambda*r - 28*c*l**2*lambda - 24*c*l**2*r**3 + 96*c*l**2*r**2 - 104*c*l**2*r + 32*c*l**2 + 2*c*l*lambda**4*r - 2*c*l*lambda**4 - 6*c*l*lambda**3*r**2 + 4*c*l*lambda**3*r + 2*c*l*lambda**3 + 24*c*l*lambda**2*r**2 - 48*c*l*lambda**2*r + 24*c*l*lambda**2 - 24*c*l*lambda*r**2 + 80*c*l*lambda*r - 56*c*l*lambda - 32*c*l*r + 32*c*l - 4*c*lambda**4*r + 4*c*lambda**4 + 24*c*lambda**3*r - 24*c*lambda**3 - 48*c*lambda**2*r + 48*c*lambda**2 + 32*c*lambda*r - 32*c*lambda + 4*l**3*lambda**2*r**3 - 12*l**3*lambda**2*r**2 + 12*l**3*lambda**2*r - 4*l**3*lambda**2 - 4*l**3*lambda*r**4 + 24*l**3*lambda*r**2 - 32*l**3*lambda*r + 12*l**3*lambda + 8*l**3*r**4 - 16*l**3*r**3 + 16*l**3*r - 8*l**3 - 4*l**2*lambda**2*r**4 + 4*l**2*lambda**2*r**3 + 12*l**2*lambda**2*r**2 - 20*l**2*lambda**2*r + 8*l**2*lambda**2 + 20*l**2*lambda*r**4 - 32*l**2*lambda*r**3 - 24*l**2*lambda*r**2 + 64*l**2*lambda*r - 28*l**2*lambda - 24*l**2*r**4 + 48*l**2*r**3 - 48*l**2*r + 24*l**2 - 8*l*lambda**3*r**3 + 24*l*lambda**3*r**2 - 24*l*lambda**3*r + 8*l*lambda**3 + 4*l*lambda**2*r**4 + 40*l*lambda**2*r**3 - 144*l*lambda**2*r**2 + 152*l*lambda**2*r - 52*l*lambda**2 - 16*l*lambda*r**4 - 64*l*lambda*r**3 + 288*l*lambda*r**2 - 320*l*lambda*r + 112*l*lambda + 16*l*r**4 + 32*l*r**3 - 192*l*r**2 + 224*l*r - 80*l + 8*lambda**3*r**3 - 24*lambda**3*r**2 + 24*lambda**3*r - 8*lambda**3 - 48*lambda**2*r**3 + 144*lambda**2*r**2 - 144*lambda**2*r + 48*lambda**2 + 96*lambda*r**3 - 288*lambda*r**2 + 288*lambda*r - 96*lambda - 64*r**3 + 192*r**2 - 192*r + 64)
+degree in r of each factor:
+   deg_r = 0  deg_lam = 0  factor: l - 1
+   deg_r = 1  deg_lam = 1  factor: -l*lambda + l*r + l + 2*lambda - 4
+   deg_r = 4  deg_lam = 4  factor: (long)
+den factored: -8*(l - 1)*(r - 1)**3*(-l*lambda + l*r + l + 2*lambda - 4)**5
+
+=================== quartic.py
+HA quartic in r of degree 4
+LA quartic in r of degree 4
+
+=================== feasibility_bounds.py
+D_T^HA + Phi_H/(2 Lambda_H) = 0
+D_T^LA + Phi_L/(2 Lambda_L) = 0
+D_T^HA at rhat_H = 0 ; D_I^HA at rbar_H = 0
+rhat_H - rbar_H = -(c*h + c - 2)*(2*c*h**2 + c*h - 4*h*lambda + 4*h + 2*lambda - 2)/(2*(c*h + c - 2*lambda + 2))
+rbar_H at lambda = 1: h/(h + 1)
+rbar_L at lambda = 1: (c*l + c - 2)/(c*l - 2)
+example h=1.3, c=1, r=0.3 (c > 2/(1+h)): D_T^HA = -0.010256410256410256  rhat_H = 0.26
+
+=================== proof_concavity.py
+--- H: denominator of d2 Omega/d kappa2 = (c - 4*h*kappa*lambda + 8*h*kappa + 2*kappa*lambda - 4*kappa)**4
+H: numerator = -1 x ['eta + 1', 'sigma + 1', 'G']
+   t^4 c^0: coefficient signs in (eta, sigma): {1}
+   t^3 c^1: coefficient signs in (eta, sigma): {1}
+   t^2 c^2: coefficient signs in (eta, sigma): {1}
+   t^1 c^3: coefficient signs in (eta, sigma): {1}
+   t^1 c^2: coefficient signs in (eta, sigma): {1}
+   t^1 c^1: coefficient signs in (eta, sigma): {1}
+   t^0 c^4: coefficient signs in (eta, sigma): {1}
+   t^0 c^3: coefficient signs in (eta, sigma): {1}
+   t^0 c^2: coefficient signs in (eta, sigma): {1}
+--- L: denominator of d2 Omega/d kappa2 = (c*l + 2*kappa*l*lambda - 4*kappa*l - 4*kappa*lambda + 8*kappa)**4
+L: numerator = -1 x ['sigma + 1', 'G']
+   t^4 c^0: coefficient signs in (sigma, nu): {1}
+   t^3 c^1: coefficient signs in (sigma, nu): {1}
+   t^2 c^2: coefficient signs in (sigma, nu): {1}
+   t^1 c^3: coefficient signs in (sigma, nu): {1, -1}
+   t^1 c^2: coefficient signs in (sigma, nu): {1, -1}
+   t^1 c^1: coefficient signs in (sigma, nu): {1}
+   t^0 c^4: coefficient signs in (sigma, nu): {1, -1}
+   t^0 c^3: coefficient signs in (sigma, nu): {1, -1}
+   t^0 c^2: coefficient signs in (sigma, nu): {1, -1}
+
+=================== proof_concavity_L.py
+t^4 c^0: factored = 16*(nu + 1)**2*(sigma + 1)**4
+      min on grid = 16
+t^3 c^1: factored = 32*(nu + 1)*(sigma + 1)**3*(nu*sigma + sigma + 2)
+      min on grid = 64.01
+t^2 c^2: factored = 24*(sigma + 1)**2*(nu*sigma + sigma + 2)**2
+      min on grid = 96
+t^1 c^3: factored = 4*(sigma + 1)*(nu**6 - 3*nu**5 + 4*nu**4 - 7*nu**3 + 2*nu**2*sigma**3 + 13*nu**2 + 4*nu*sigma**3 + 12*nu*sigma**2 - 16*nu + 2*sigma**3 + 12*sigma**2 + 24*sigma + 16)
+      min on grid = 32
+t^1 c^2: factored = 8*nu*(nu - 1)**2*(sigma + 1)*(nu**2*sigma + 2*nu**2 + nu*sigma + 2*nu + 3*sigma + 3)
+      min on grid = 5.599e-07
+t^1 c^1: factored = 16*nu*(nu + 1)*(sigma + 1)**2*(nu**2 + 2*sigma + 1)
+      min on grid = 0.0016
+t^0 c^4: factored = 2*nu**6*sigma - 6*nu**5*sigma + nu**5 + 8*nu**4*sigma + 2*nu**4 - 14*nu**3*sigma - 19*nu**3 + nu**2*sigma**4 + 26*nu**2*sigma + 36*nu**2 + 2*nu*sigma**4 + 8*nu*sigma**3 - 32*nu*sigma - 32*nu + sigma**4 + 8*sigma**3 + 24*sigma**2 + 32*sigma + 16
+      min on grid = 4
+t^0 c^3: factored = 4*nu*(nu - 1)**2*(nu**2*sigma**2 + 2*nu**2*sigma + nu*sigma**2 + nu*sigma + nu + 3*sigma**2 + 9*sigma + 6)
+      min on grid = 2.8e-07
+t^0 c^2: factored = 4*nu*(sigma + 1)*(2*nu**3*sigma - nu**2*sigma + nu**2 + 4*nu*sigma**2 + 8*nu*sigma + 6*nu + 4*sigma**2 + 7*sigma + 1)
+      min on grid = 0.0004002
+
+=================== proof_monotone_commission.py
+H: denominator of the cross-partial = (c - 4*h*kappa*lambda + 8*h*kappa + 2*kappa*lambda - 4*kappa)**4
+H: substituted numerator = const 16 x factors [eta + 1, 'F_H'] / ( (eta + 2)**5*(sigma + 1) )
+wrote bernstein_certificate_H.txt with 216 coefficients
+H: Bernstein degrees (u,s,sigma) = [5, 5, 5]  coefficient classes: {'zero': 78, 'neg': 138, 'pos_or_mixed': 0}
+L: denominator of the cross-partial = (c*l + 2*kappa*l*lambda - 4*kappa*l - 4*kappa*lambda + 8*kappa)**4
+L: substituted numerator = const 16 x factors ['F_L'] / ( (nu - 2)**5*(sigma + 1) )
+wrote bernstein_certificate_L.txt with 1944 coefficients
+L: Bernstein degrees (u,s,sigma,nu) = [5, 5, 5, 8]  positive 1416  zero 528  negative 0
+H : largest sampled value of the cross-partial (should be negative): -0.01589961503139995
+L : largest sampled value of the cross-partial (should be negative): -0.004224454444575704
+
+=================== proof_welfare_rigid.py
+HA dTW/dlam factored numerator factors: (1, [(h - 1, 1), (h, 1), (2*c*h**2 + c*h - 4*h + 2*r, 1), (4*c*h**2*lambda*r - 4*c*h**2*lambda - 4*c*h**2*r + 4*c*h**2 + 2*c*h*r**2 - 3*c*h*r + c*h - c*lambda*r + 2*c*lambda + c*r**2 - c*r - 2*c - 8*h*lambda*r + 8*h*lambda + 8*h*r - 8*h + 6*lambda*r - 6*lambda - 6*r + 6, 1)])
+HA denominator: 4*(r - 1)*(2*h*lambda - 4*h - lambda + r + 1)**3
+LA dTW/dlam factored numerator factors: (-1, [(l - 1, 1), (l, 1), (c*l - c + 2*r - 2, 1), (-c*l**2*lambda*r + c*l**2*lambda + c*l**2*r**2 - c*l**2 + 3*c*l*lambda*r - 3*c*l*lambda - c*l*r**2 - c*l*r + 2*c*l - 2*c*lambda*r + 3*c*lambda + 2*c*r - 4*c + 2*l*lambda*r - 2*l*lambda - 2*l*r**2 + 2*l - 2*lambda*r + 2*lambda + 4*r**2 - 4*r, 1)])
+LA denominator: 4*(r - 1)*(-l*lambda + l*r + l + 2*lambda - 4)**3
+random feasible draws {'H': 126266, 'L': 156479}  mismatches {'H0': 0, 'H1': 0, 'L0': 0, 'L1': 0, 'Ushape': 0}
+baseline: H falls at 0 iff c > 0.9091
+H rises at parity iff r > root of [0.2623, 1.3766]
+L falls at 0 iff c < 0.3895 ;  L rises at parity iff c > 0.7317
+ r= 0.1  H falls-at-0 threshold at h=1.3: 0.8032   L thresholds at l=0.9 (falls below, rises to parity above): 0.4902 0.8891
+ r= 0.15  H falls-at-0 threshold at h=1.3: 0.8515   L thresholds at l=0.9 (falls below, rises to parity above): 0.4389 0.8095
+ r= 0.25  H falls-at-0 threshold at h=1.3: 0.9792   L thresholds at l=0.9 (falls below, rises to parity above): 0.3421 0.6559
+ r= 0.3  H falls-at-0 threshold at h=1.3: 1.0672   L thresholds at l=0.9 (falls below, rises to parity above): 0.2969 0.5822
+
+=================== grid_evaluation.py
+flexible points 5510  time 59.5
+rigid rows 34610  H_ok 31799  L_ok 32674  time 118.6
+
+=================== profit_gain_flex.py
+HA: points 551, largest peak intensity 0.0600, largest gain 0.0623%, smallest gain 3.74e-06%, profit below its zero-intensity level from at most 0.1170, points without such an intensity on [0, 0.25]: 0
+LA: points 5510, largest peak intensity 0.0650, largest gain 0.0829%, smallest gain 4.13e-06%, profit below its zero-intensity level from at most 0.1260, points without such an intensity on [0, 0.25]: 0
+
+=================== observations.py
+flexible points: 5510
+points without interior r*: 0
+r* strictly decreasing: HA 1.0  LA 1.0
+D_T,D_I>0 at r*:  1.0
+HA piI increasing 1.0  margin increasing 1.0  CS inc 1.0  TW inc 1.0  prices dec 1.0
+   profit peak lambda on the 0.02 grid (profit_gain_flex.py locates it on a 0.0005 grid): max 0.06  mean 0.021   max gain % 0.0623  profit decreasing after peak: 1.0
+   r*(0) range 0.35 0.904   share r*(0)<0.4 0.0417
+   r*(0)<0.4 occurs at c/cbound >= 0.893  c>= 0.825  h range 1.1 1.4  l range 0.5 0.95
+   r*(1) range 0.036 0.25
+LA piI increasing 1.0  margin increasing 1.0  CS inc 1.0  TW inc 1.0  prices dec 1.0
+   profit peak lambda on the 0.02 grid (profit_gain_flex.py locates it on a 0.0005 grid): max 0.06  mean 0.022   max gain % 0.0826  profit decreasing after peak: 1.0
+   r*(0) range 0.342 0.901   share r*(0)<0.4 0.0372
+   r*(0)<0.4 occurs at c/cbound >= 0.866  c>= 0.825  h range 1.1 1.4  l range 0.5 0.95
+   r*(1) range 0.002 0.701
+baseline rows: 1
+tier agreement at every lambda: 0.9677  mean fraction: 0.9798
+flexible-agency tier changes with lambda at 145 points; merchant tier never changes: True
+disagreement points: min |merchant tier gap| relative: {'count': 178.0, 'mean': 0.025, 'std': 0.0205, 'min': 0.0001, '25%': 0.0078, '50%': 0.0204, '75%': 0.0359, 'max': 0.0976}
+agreement points: min |merchant tier gap| quantiles {0.0: 0.0005, 0.01: 0.0088, 0.05: 0.0344}
+platform prefers agency (objective) at every lambda: 1.0  (profit): 1.0
+consumers prefer merchant at every lambda: 1.0
+incumbent prefers merchant at every lambda: 0.9735
+incumbent exceptions: h 1.1 2.0  l 0.5 0.95  c 0.5 0.8  frac of lambdas {'count': 146.0, 'mean': 0.425, 'std': 0.305, 'min': 0.0, '25%': 0.157, '50%': 0.392, '75%': 0.662, 'max': 0.98}
+        h     l      c  inc_merchant_frac
+26   1.10  0.50  0.750           0.980392
+27   1.10  0.50  0.775           0.549020
+28   1.10  0.50  0.800           0.176471
+61   1.10  0.55  0.750           0.549020
+62   1.10  0.55  0.775           0.156863
+95   1.10  0.60  0.725           0.607843
+96   1.10  0.60  0.750           0.176471
+129  1.10  0.65  0.700           0.725490
+130  1.10  0.65  0.725           0.254902
+163  1.10  0.70  0.675           0.960784
+164  1.10  0.70  0.700           0.392157
+165  1.10  0.70  0.725           0.000000
+198  1.10  0.75  0.675           0.666667
+199  1.10  0.75  0.700           0.078431
+233  1.10  0.80  0.675           0.372549
+268  1.10  0.85  0.675           0.039216
+338  1.10  0.95  0.675           0.588235
+376  1.15  0.50  0.750           0.803922
+377  1.15  0.50  0.775           0.333333
+378  1.15  0.50  0.800           0.000000
+410  1.15  0.55  0.725           0.882353
+411  1.15  0.55  0.750           0.352941
+412  1.15  0.55  0.775           0.000000
+445  1.15  0.60  0.725           0.431373
+446  1.15  0.60  0.750           0.000000
+479  1.15  0.65  0.700           0.627451
+480  1.15  0.65  0.725           0.039216
+514  1.15  0.70  0.700           0.215686
+548  1.15  0.75  0.675           0.607843
+583  1.15  0.80  0.675           0.313725
+CS gap (preferred tiers) widens: 0.9738656987295826   H-tier gap widens 1.0   L-tier gap widens 0.9758620689655172
+switch directions: {'H->L': 90, 'L->H': 55}
+merchant rel gap at switching points: max 0.0976   agency rel gap max over lambda at switching points: 0.0733
+incumbent exceptions: 146  of which tier disagreement: 146
+within tier, incumbent prefers merchant at every lambda: H 1.0  L 1.0
+H-tier exceptions c range None None
+L-tier exceptions c range None None  h None None
+L CS-gap non-monotone points: 133  c range 0.1 0.125  l range 0.75 0.95  h range 1.1 2.0
+        h     l      c   mono        g0        g1
+175  1.10  0.75  0.100  False -0.011080  0.107433
+210  1.10  0.80  0.100  False -0.009116  0.100037
+245  1.10  0.85  0.100  False -0.007020  0.089419
+280  1.10  0.90  0.100  False -0.004796  0.074216
+281  1.10  0.90  0.125  False -0.004030  0.068650
+315  1.10  0.95  0.100  False -0.002453  0.050963
+316  1.10  0.95  0.125  False -0.002067  0.045718
+525  1.15  0.75  0.100  False -0.011080  0.107433
+560  1.15  0.80  0.100  False -0.009116  0.100037
+595  1.15  0.85  0.100  False -0.007020  0.089419
+630  1.15  0.90  0.100  False -0.004796  0.074216
+631  1.15  0.90  0.125  False -0.004030  0.068650
+non-monotone preferred-tier CS gap points: 144   of which flexible tier switches: 144   switch points with monotone gap: 1
+H : agency better at lambda=0 share 0.784  agency better at lambda=1 share 0.0  crossings dist {1: 4320, 0: 1190}
+   lambda=0 merchant better: c range 0.1 0.525  c/bound range 0.105 0.551
+   lambda=0 agency better: c range 0.1 0.95
+   crossing location: min 0.001  max 0.499  share below 0.5 1.0
+L : agency better at lambda=0 share 0.9045  agency better at lambda=1 share 0.0138  crossings dist {1: 4908, 0: 545, 2: 57}
+   lambda=0 merchant better: c range 0.7 0.95  c/bound range 0.735 0.999
+   lambda=0 agency better: c range 0.1 0.8283
+   crossing location: min 0.001  max 0.907  share below 0.5 0.3961
+   crossings >=0.5 at c range 0.1 0.5  h range 1.1 2.0  l range 0.5 0.95
+H (value, min c with agency better, max c with agency better, n merchant better): [(1.1, np.float64(0.55), np.float64(0.95), np.int64(180)), (1.15, np.float64(0.525), np.float64(0.9252), np.int64(170)), (1.2, np.float64(0.475), np.float64(0.9041), np.int64(150)), (1.25, np.float64(0.45), np.float64(0.8839), np.int64(140)), (1.3, np.float64(0.425), np.float64(0.8646), np.int64(130)), (1.35, np.float64(0.375), np.float64(0.85), np.int64(110)), (1.4, np.float64(0.35), np.float64(0.8283), np.int64(100)), (1.45, np.float64(0.3), np.float64(0.8113), np.int64(80)), (1.5, np.float64(0.275), np.float64(0.795), np.int64(70)), (1.55, np.float64(0.225), np.float64(0.7793), np.int64(50)), (1.6, np.float64(0.125), np.float64(0.7642), np.int64(10)), (1.65, np.float64(0.1), np.float64(0.75), np.int64(0)), (1.7, np.float64(0.1), np.float64(0.7357), np.int64(0)), (1.75, np.float64(0.1), np.float64(0.725), np.int64(0)), (1.8, np.float64(0.1), np.float64(0.7093), np.int64(0)), (1.85, np.float64(0.1), np.float64(0.7), np.int64(0)), (1.9, np.float64(0.1), np.float64(0.6847), np.int64(0)), (1.95, np.float64(0.1), np.float64(0.675), np.int64(0)), (2.0, np.float64(0.1), np.float64(0.6617), np.int64(0))]
+L (value, min c with agency better, max c with agency better, n merchant better): [(0.5, np.float64(0.1), np.float64(0.8283), np.int64(20)), (0.55, np.float64(0.1), np.float64(0.8113), np.int64(28)), (0.6, np.float64(0.1), np.float64(0.8), np.int64(29)), (0.65, np.float64(0.1), np.float64(0.7793), np.int64(38)), (0.7, np.float64(0.1), np.float64(0.7642), np.int64(49)), (0.75, np.float64(0.1), np.float64(0.75), np.int64(50)), (0.8, np.float64(0.1), np.float64(0.725), np.int64(63)), (0.85, np.float64(0.1), np.float64(0.7093), np.int64(77)), (0.9, np.float64(0.1), np.float64(0.7), np.int64(78)), (0.95, np.float64(0.1), np.float64(0.6847), np.int64(94))]
+== H  valid rows 31799  demands positive at all lambda: 1.0  incumbent profit falls: 0.9996855247020346
+  CS: agency better at 0: 0.9997  merchant better at 1: 1.0  crossings: {1: 31790, 0: 9}
+  platform prefers merchant at 0: 0.9603  agency preferred somewhere: 0.9934  crossings: {1: 21249, 2: 9740, 0: 810}
+  agency preferred at lambda=0 at: r [np.float64(0.25), np.float64(0.3)]  c range 0.65 1.1061  h 1.1 2.0  l 0.5 0.95
+  welfare interior peak share 0.6249  max post-peak drop % 1.473
+   r=0.1: interior peak share 0.760; c range with interior peak 0.1-0.8
+   r=0.15: interior peak share 0.819; c range with interior peak 0.1-0.95
+   r=0.2: interior peak share 0.852; c range with interior peak 0.125-0.975
+   r=0.25: interior peak share 0.619; c range with interior peak 0.2-1.025
+   r=0.3: interior peak share 0.044; c range with interior peak 0.5-0.775
+== L  valid rows 32674  demands positive at all lambda: 1.0  incumbent profit falls: 1.0
+  CS: agency better at 0: 1.0  merchant better at 1: 1.0  crossings: {1: 32674}
+  platform prefers merchant at 0: 0.9938  agency preferred somewhere: 0.9997  crossings: {1: 21727, 2: 10936, 0: 11}
+  agency preferred at lambda=0 at: r [np.float64(0.25), np.float64(0.3)]  c range 0.825 1.0761  h 1.1 1.9  l 0.5 0.6
+  welfare interior peak share 0.5637  max post-peak drop % 1.979
+   r=0.1: interior peak share 0.622; c range with interior peak 0.225-1.05
+   r=0.15: interior peak share 0.608; c range with interior peak 0.175-0.9252
+   r=0.2: interior peak share 0.568; c range with interior peak 0.125-0.8
+   r=0.25: interior peak share 0.524; c range with interior peak 0.1-0.675
+   r=0.3: interior peak share 0.489; c range with interior peak 0.1-0.575
+===== H tier: c-intervals with an interior welfare peak, by r and h
+ r=0.1: 1.1:[(np.float64(0.1), np.float64(0.8))] | 1.2:[(np.float64(0.1), np.float64(0.8))] | 1.3:[(np.float64(0.1), np.float64(0.8))] | 1.4:[(np.float64(0.1), np.float64(0.775))] | 1.5:[(np.float64(0.1), np.float64(0.75))] | 1.6:[(np.float64(0.1), np.float64(0.725))] | 1.7:[(np.float64(0.1), np.float64(0.7))] | 1.8:[(np.float64(0.1), np.float64(0.675))] | 1.9:[(np.float64(0.1), np.float64(0.65))] | 2.0:[(np.float64(0.1), np.float64(0.65))]
+ r=0.15: 1.1:[(np.float64(0.1), np.float64(0.875))] | 1.2:[(np.float64(0.1), np.float64(0.875))] | 1.3:[(np.float64(0.1), np.float64(0.85))] | 1.4:[(np.float64(0.1), np.float64(0.8))] | 1.5:[(np.float64(0.1), np.float64(0.775)), (np.float64(0.95), np.float64(0.95))] | 1.6:[(np.float64(0.1), np.float64(0.75))] | 1.7:[(np.float64(0.1), np.float64(0.725))] | 1.8:[(np.float64(0.1), np.float64(0.7))] | 1.9:[(np.float64(0.1), np.float64(0.675))] | 2.0:[(np.float64(0.1), np.float64(0.65))]
+ r=0.2: 1.1:[(np.float64(0.125), np.float64(0.975))] | 1.2:[(np.float64(0.125), np.float64(0.95))] | 1.3:[(np.float64(0.125), np.float64(0.9))] | 1.4:[(np.float64(0.125), np.float64(0.85))] | 1.5:[(np.float64(0.125), np.float64(0.825))] | 1.6:[(np.float64(0.125), np.float64(0.775))] | 1.7:[(np.float64(0.125), np.float64(0.75))] | 1.8:[(np.float64(0.125), np.float64(0.725))] | 1.9:[(np.float64(0.125), np.float64(0.7))] | 2.0:[(np.float64(0.125), np.float64(0.675))]
+ r=0.25: 1.1:[] | 1.2:[(np.float64(0.725), np.float64(1.025))] | 1.3:[(np.float64(0.4), np.float64(0.975))] | 1.4:[(np.float64(0.325), np.float64(0.9))] | 1.5:[(np.float64(0.275), np.float64(0.875))] | 1.6:[(np.float64(0.25), np.float64(0.825))] | 1.7:[(np.float64(0.225), np.float64(0.8))] | 1.8:[(np.float64(0.2), np.float64(0.75))] | 1.9:[(np.float64(0.2), np.float64(0.725))] | 2.0:[(np.float64(0.2), np.float64(0.7))]
+ r=0.3: 1.1:[] | 1.2:[] | 1.3:[] | 1.4:[] | 1.5:[] | 1.6:[] | 1.7:[] | 1.8:[] | 1.9:[(np.float64(0.625), np.float64(0.75))] | 2.0:[(np.float64(0.5), np.float64(0.725))]
+===== L tier: c-intervals with an interior welfare peak, by r and l
+ r=0.1: 0.5:[(np.float64(0.225), np.float64(1.05))] | 0.6:[(np.float64(0.3), np.float64(1.0))] | 0.7:[(np.float64(0.35), np.float64(0.95))] | 0.8:[(np.float64(0.425), np.float64(0.904))] | 0.9:[(np.float64(0.5), np.float64(0.875))]
+ r=0.15: 0.5:[(np.float64(0.175), np.float64(0.925))] | 0.6:[(np.float64(0.25), np.float64(0.884))] | 0.7:[(np.float64(0.3), np.float64(0.85))] | 0.8:[(np.float64(0.375), np.float64(0.828))] | 0.9:[(np.float64(0.45), np.float64(0.8))]
+ r=0.2: 0.5:[(np.float64(0.125), np.float64(0.8))] | 0.6:[(np.float64(0.2), np.float64(0.775))] | 0.7:[(np.float64(0.275), np.float64(0.75))] | 0.8:[(np.float64(0.325), np.float64(0.725))] | 0.9:[(np.float64(0.4), np.float64(0.725))]
+ r=0.25: 0.5:[(np.float64(0.1), np.float64(0.675))] | 0.6:[(np.float64(0.15), np.float64(0.675))] | 0.7:[(np.float64(0.225), np.float64(0.65))] | 0.8:[(np.float64(0.3), np.float64(0.65))] | 0.9:[(np.float64(0.35), np.float64(0.65))]
+ r=0.3: 0.5:[(np.float64(0.1), np.float64(0.575))] | 0.6:[(np.float64(0.1), np.float64(0.575))] | 0.7:[(np.float64(0.175), np.float64(0.575))] | 0.8:[(np.float64(0.25), np.float64(0.575))] | 0.9:[(np.float64(0.3), np.float64(0.575))]
+H rows where merchant gives more CS already at lambda=0:
+        h     l       c    r
+397   1.1  0.50  1.0750  0.3
+3197  1.1  0.85  1.0761  0.3
+H rows where incumbent profit not strictly falling:
+         h    l     c     r
+30277  1.5  0.5  0.95  0.15
+welfare non-interior peaks located at: {1.0: 15340, 0.0: 10845}
+H never prefers agency: r [np.float64(0.1), np.float64(0.15), np.float64(0.2), np.float64(0.3)]  c range 0.1 0.2  h 1.1 1.2  l 0.5 0.95
+   agency preferred at lambda=0, r=0.25: min c 0.725  (h 1.1-2.0, l 0.5-0.95)
+   agency preferred at lambda=0, r=0.3: min c 0.65  (h 1.1-2.0, l 0.5-0.95)
+L never prefers agency: r [np.float64(0.1)]  c range 0.95 0.95  h 1.1 1.6  l 0.95 0.95
+   agency preferred at lambda=0, r=0.25: min c 1.075  (h 1.1-1.35, l 0.5-0.5)
+   agency preferred at lambda=0, r=0.3: min c 0.825  (h 1.1-1.9, l 0.5-0.6)
+rows with both tiers valid: 30974   switch rows: 2018   crossings among switch rows: {1: 2018}   coverage larger under L at every lambda: 1.0
+switch rows: h 1.1 2.0  l 0.55 0.95  c 0.5 0.85  r [np.float64(0.1), np.float64(0.15), np.float64(0.2), np.float64(0.25), np.float64(0.3)]
+at h=1.3: l [np.float64(0.8), np.float64(0.85), np.float64(0.9), np.float64(0.95)]  c 0.625 0.825  r [np.float64(0.1), np.float64(0.15), np.float64(0.2), np.float64(0.25), np.float64(0.3)]
+===== H
+ r=0.1 h=1.1: i[0.100,0.800] 0[0.825,1.050]
+ r=0.1 h=1.3: i[0.100,0.800] 0[0.825,1.050]
+ r=0.1 h=1.5: i[0.100,0.750] 0[0.775,0.950]
+ r=0.1 h=2.0: i[0.100,0.650] 0[0.675,0.775]
+ r=0.15 h=1.1: i[0.100,0.875] 0[0.900,1.050]
+ r=0.15 h=1.3: i[0.100,0.850] 0[0.875,1.025]
+ r=0.15 h=1.5: i[0.100,0.775] 0[0.800,0.925] i[0.950,0.950]
+ r=0.15 h=2.0: i[0.100,0.650] 0[0.675,0.750]
+ r=0.2 h=1.1: 1[0.100,0.100] i[0.125,0.975] 0[1.000,1.050]
+ r=0.2 h=1.3: 1[0.100,0.100] i[0.125,0.900] 0[0.925,1.025]
+ r=0.2 h=1.5: 1[0.100,0.100] i[0.125,0.825] 0[0.850,0.925]
+ r=0.2 h=2.0: 1[0.100,0.100] i[0.125,0.675] 0[0.700,0.750]
+ r=0.25 h=1.1: 1[0.100,1.050]
+ r=0.25 h=1.3: 1[0.100,0.375] i[0.400,0.975] 0[1.000,1.000]
+ r=0.25 h=1.5: 1[0.100,0.250] i[0.275,0.875] 0[0.900,0.900]
+ r=0.25 h=2.0: 1[0.100,0.175] i[0.200,0.700] 0[0.725,0.725]
+ r=0.3 h=1.1: 1[0.100,1.050]
+ r=0.3 h=1.3: 1[0.100,0.975]
+ r=0.3 h=1.5: 1[0.100,0.875]
+ r=0.3 h=2.0: 1[0.100,0.475] i[0.500,0.725]
+===== L
+ r=0.1 l=0.5: 0[0.100,0.200] i[0.225,1.050] 1[1.075,1.106]
+ r=0.1 l=0.7: 0[0.100,0.325] i[0.350,0.950] 1[0.975,1.100]
+ r=0.1 l=0.9: 0[0.100,0.475] i[0.500,0.875] 1[0.900,0.975]
+ r=0.1 l=0.95: 0[0.100,0.525] i[0.550,0.850] 1[0.875,0.950]
+ r=0.15 l=0.5: 0[0.100,0.150] i[0.175,0.925] 1[0.950,1.106]
+ r=0.15 l=0.7: 0[0.100,0.275] i[0.300,0.850] 1[0.875,1.050]
+ r=0.15 l=0.9: 0[0.100,0.425] i[0.450,0.800] 1[0.825,0.950]
+ r=0.15 l=0.95: 0[0.100,0.475] i[0.500,0.775] 1[0.800,0.925]
+ r=0.2 l=0.5: 0[0.100,0.100] i[0.125,0.800] 1[0.825,1.106]
+ r=0.2 l=0.7: 0[0.100,0.250] i[0.275,0.750] 1[0.775,1.025]
+ r=0.2 l=0.9: 0[0.100,0.375] i[0.400,0.725] 1[0.750,0.925]
+ r=0.2 l=0.95: 0[0.100,0.425] i[0.450,0.700] 1[0.725,0.900]
+ r=0.25 l=0.5: i[0.100,0.675] 1[0.700,1.075]
+ r=0.25 l=0.7: 0[0.100,0.200] i[0.225,0.650] 1[0.675,0.975]
+ r=0.25 l=0.9: 0[0.100,0.325] i[0.350,0.650] 1[0.675,0.875]
+ r=0.25 l=0.95: 0[0.100,0.375] i[0.400,0.625] 1[0.650,0.875]
+ r=0.3 l=0.5: i[0.100,0.575] 1[0.600,1.025]
+ r=0.3 l=0.7: 0[0.100,0.150] i[0.175,0.575] 1[0.600,0.925]
+ r=0.3 l=0.9: 0[0.100,0.275] i[0.300,0.575] 1[0.600,0.850]
+ r=0.3 l=0.95: 0[0.100,0.325] i[0.350,0.575] 1[0.600,0.825]
+| id   | observation                                                                                                                                                                      |   points | support   | exceptions                                                                              |
+|:-----|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------:|:----------|:----------------------------------------------------------------------------------------|
+| F1   | Optimal commission strictly decreases in the intensity (proved in Lemma 3)                                                                                                       |     5510 | 100.00%   | none                                                                                    |
+| F2   | Incumbent margin and profit strictly increase in the intensity, both tiers                                                                                                       |     5510 | 100.00%   | none                                                                                    |
+| F3   | Total welfare strictly increases in the intensity, both tiers                                                                                                                    |     5510 | 100.00%   | none                                                                                    |
+| F4   | Platform profit peaks at an intensity of at most 0.065 with a gain of at most 0.083%, falls thereafter, and is below its zero-intensity level from an intensity of at most 0.126 |     5510 | 100.00%   | none                                                                                    |
+| F5   | Optimal commission at zero intensity is at least 0.4                                                                                                                             |     5510 | 95.64%    | only where c > 0.8                                                                      |
+| F6   | Tier under flexible agency equals merchant tier at every intensity                                                                                                               |     5510 | 96.77%    | only where the two merchant tiers are within 10% in objective value                     |
+| F7   | Agency tier does not change with the intensity                                                                                                                                   |     5510 | 97.37%    | same set as F6; switches in both directions                                             |
+| F8   | Platform objective and profit higher under agency at every intensity                                                                                                             |     5510 | 100.00%   | none                                                                                    |
+| F9   | Consumer surplus higher under merchant at every intensity (preferred tiers)                                                                                                      |     5510 | 100.00%   | none                                                                                    |
+| F10  | Incumbent profit higher under merchant at every intensity (preferred tiers)                                                                                                      |     5510 | 97.35%    | only where the formats lead to different tiers; within a tier 100%                      |
+| F11  | Consumer-surplus gap between formats widens in the intensity (preferred tiers)                                                                                                   |     5510 | 97.39%    | only where the agency tier changes with the intensity                                   |
+| F12  | High-end: total-welfare ranking of formats crosses at most once, below 0.5                                                                                                       |     5510 | 100.00%   | none                                                                                    |
+| F13  | Economy: total-welfare ranking of formats crosses at most once                                                                                                                   |     5510 | 98.97%    | c <= 0.15 with l >= 0.9                                                                 |
+| R1   | Tier switch (high-end to economy): positioning gap crosses zero exactly once where sign conditions hold                                                                          |     2018 | 100.00%   | none                                                                                    |
+| R2   | Tier switch (high-end to economy): coverage larger under economy integration at every intensity                                                                                  |     2018 | 100.00%   | none                                                                                    |
+| R3   | Consumer-surplus gap between formats crosses zero exactly once (high-end)                                                                                                        |    31799 | 99.97%    | h = 1.1, r = 0.3, c at its upper bound                                                  |
+| R4   | Consumer-surplus gap between formats crosses zero exactly once (economy)                                                                                                         |    32674 | 100.00%   | none                                                                                    |
+| R5   | Platform prefers merchant at zero intensity (high-end)                                                                                                                           |    31799 | 96.03%    | r >= 0.25 and c > 0.65                                                                  |
+| R6   | Platform prefers merchant at zero intensity (economy)                                                                                                                            |    32674 | 99.38%    | r >= 0.25 and c > 0.8                                                                   |
+| R7   | Platform prefers agency at some intensity (high-end)                                                                                                                             |    31799 | 99.34%    | c <= 0.2 with h <= 1.2                                                                  |
+| R8   | Platform prefers agency at some intensity (economy)                                                                                                                              |    32674 | 99.97%    | l = 0.95, c = 0.95, r = 0.1                                                             |
+| R9   | Welfare decline from peak to parity below 2% (both tiers)                                                                                                                        |    64473 | 100.00%   | none                                                                                    |
+| R10  | Reverse tier switch (economy to high-end): positioning gap crosses zero exactly once where it is negative at zero intensity and positive at parity                               |     2017 | 100.00%   | none                                                                                    |
+| R11  | Reverse tier switch: consumer surplus at parity higher under high-end integration                                                                                                |     2017 | 99.21%    | only at the upper end of the quality-cost range of the switch, c >= 0.65 with r >= 0.15 |
+| R12  | Reverse tier switch: coverage at parity larger under economy integration                                                                                                         |     2017 | 95.34%    | h <= 1.15 with c <= 0.225                                                               |
+flexible points 5510  rigid rows 34610  H valid 31799  L valid 32674  both 30974
+
+=================== baseline_numbers.py
+== shares under flexible commission at baseline ==
+HA 0 r*=0.4676 DT=0.1325 DI=0.1707 share_T=0.4369 coverage=0.3031
+HA 0.5 r*=0.3753 DT=0.1940 DI=0.1997 share_T=0.4927 coverage=0.3936
+HA 1 r*=0.0975 DT=0.3454 DI=0.2167 share_T=0.6145 coverage=0.5622
+LA 0 r*=0.4766 DT=0.2091 DI=0.1301 share_T=0.6164 coverage=0.3392
+LA 0.5 r*=0.3790 DT=0.2970 DI=0.1537 share_T=0.6589 coverage=0.4507
+LA 1 r*=0.0329 DT=0.5086 DI=0.1640 share_T=0.7562 coverage=0.6726
+== lambda at which r* equals a cap ==
+HA cap 0.15 binds for lambda below 0.9483
+HA cap 0.2 binds for lambda below 0.8876
+HA cap 0.25 binds for lambda below 0.8116
+LA cap 0.15 binds for lambda below 0.9083
+LA cap 0.2 binds for lambda below 0.8545
+LA cap 0.25 binds for lambda below 0.7874
+== flexible profit peak at baseline ==
+HA peak at lambda 0.0266 gain % 0.0156 piR(0)= 0.104053
+LA peak at lambda 0.0102 gain % 0.0025 piR(0)= 0.107345
+HA capped optimum brute-force vs min(r*,cap): [(0, np.float64(0.2), 0.2), (0.5, np.float64(0.2), 0.2), (0.9, np.float64(0.1906), np.float64(0.1906)), (1.0, np.float64(0.0975), np.float64(0.0975))]
+HA incumbent profit under 20% cap: lam=0 0.01687, min 0.00872 at lam=0.89, lam=1 0.00978
+LA capped optimum brute-force vs min(r*,cap): [(0, np.float64(0.2), 0.2), (0.5, np.float64(0.2), 0.2), (0.9, np.float64(0.1584), np.float64(0.1584)), (1.0, np.float64(0.0329), np.float64(0.0329))]
+LA incumbent profit under 20% cap: lam=0 0.00616, min 0.00223 at lam=0.86, lam=1 0.00260
+lambda=0 TW tie: H tier at h=1.3: c= 0.4043    L tier at l=0.9: c= 0.7087
+baseline TW crossing H 0.2987
+baseline TW crossing L 0.0344
+H baseline lambda 0  CS loss share of merchant CS 0.0237
+H baseline lambda 1  CS loss share of merchant CS 0.1162
+vary l (h=1.3,c=0.7,r=0.2): switch for l in 0.8425 to 0.995
+vary c (h=1.3,l=0.9,r=0.2): switch for c in 0.6325 to 0.75
+vary r (h=1.3,l=0.9,c=0.7): switch for r in 0.01 to 0.3575
+lambda_hat at r= 0.1 0.2265
+lambda_hat at r= 0.2 0.1937
+lambda_hat at r= 0.3 0.1029
+r = 0.1  switch exists for q_L above 0.832
+r = 0.2  switch exists for q_L above 0.841
+r = 0.3  switch exists for q_L above 0.867
+
+=================== check_reviewers.py
+=== (1) Win-win threshold, Prop 5(ii) ===
+numerator factored: -h*(h - 1)*(2*c*h**2 + c*h - 4*h + 2*r)*(-2*c*h*r + 2*c*h + c*r**2 + 2*c*r + c + 4*r - 4)
+denominator factored: 4*(r - 1)*(-4*h + r + 1)**3
+cbar(baseline h=1.3, r=0.2) = 0.9090909090909091
+cbar(h=1.3, r=0.35) = 0.7402135231316725
+dpiR^HA/dlam at lam=0, baseline = -0.00213598125
+
+=== (2) Control paradox band at baseline, high-end ===
+Omega^HA - Omega^HM sign changes at lam = [np.float64(0.6855268388592711), np.float64(0.9854223723882455)]  value at 0: -0.0386425  at 1: -0.0005536425781250132
+CS^HM - CS^HA sign changes at lam = [np.float64(0.8164520977462317)]  value at 0: -0.0770852875  at 1: 0.05049877929687499
+Economy: Omega^LA - Omega^LM sign changes at [np.float64(0.779501323964025), np.float64(0.9079135602435685)]  at 0: -0.04915916204376994  at 1: -0.002914096010445566
+Economy: CS^LM - CS^LA sign changes at [np.float64(0.8350251127527905)]
+piR^HA - piR^HM sign changes at [np.float64(0.803571943628075)]  at 0: -0.0386425  at 1: 0.04994513671875001
+
+=== (3) Tier switch under agency, Prop 3(ii) ===
+Delta^A(0)= 0.003758693293769938  Delta^A(1)= -0.011155484067679439  crossing: [np.float64(0.1936555724212269)]
+  q_L=0.8: Delta^A(0)=-0.0022, Delta^A(1)=-0.0106, crossings=[]
+  q_L=0.82: Delta^A(0)=-0.0012, Delta^A(1)=-0.0109, crossings=[]
+  q_L=0.83: Delta^A(0)=-0.0006, Delta^A(1)=-0.0111, crossings=[]
+  q_L=0.84: Delta^A(0)=-0.0001, Delta^A(1)=-0.0112, crossings=[]
+  q_L=0.85: Delta^A(0)=0.0005, Delta^A(1)=-0.0112, crossings=[np.float64(0.0388230776478939)]
+  q_L=0.86: Delta^A(0)=0.0011, Delta^A(1)=-0.0113, crossings=[np.float64(0.0767123553487842)]
+  q_L=0.9: Delta^A(0)=0.0038, Delta^A(1)=-0.0112, crossings=[np.float64(0.19365557242125556)]
+  q_L=0.95: Delta^A(0)=0.0075, Delta^A(1)=-0.0104, crossings=[np.float64(0.3007100863070263)]
+
+=== (4) Welfare peaks under agency at baseline ===
+HA TW peak at lam = 0.814158693569645  TW = 0.2060053124999983  TW(0)= 0.20458693125  TW(1)= 0.205800029296875
+LA TW peak at lam = 0.9413180956715487  TW = 0.2111313461538402  TW(0)= 0.2099378459842372  TW(1)= 0.21111940737833595
+
+=== (5) Global win-win check at (h=1.3,c=0.9,r=0.35) and baseline ===
+{c: 0.9, r: 0.35} ['0.06725', '0.06737', '0.06748', '0.06759', '0.06767']
+{} ['0.06088', '0.06008', '0.05850', '0.05554', '0.04995']
+
+=== (6) Endogenous commission at baseline (OTA picks r to max Omega) ===
+HA lam=0: r*=0.4676 piR=0.1041 piI=0.0036 CS=0.0486 TW=0.1562 Omega=0.1041 DI=0.1707 margI=0.0210
+HA lam=0.5: r*=0.3753 piR=0.0952 piI=0.0057 CS=0.0831 TW=0.1841 Omega=0.1368 DI=0.1997 margI=0.0288
+HA lam=0.75: r*=0.2831 piR=0.0751 piI=0.0075 CS=0.1164 TW=0.1990 Omega=0.1624 DI=0.2128 margI=0.0352
+HA lam=0.95: r*=0.1484 piR=0.0384 piI=0.0093 CS=0.1607 TW=0.2084 Omega=0.1911 DI=0.2174 margI=0.0427
+HA lam=1.0: r*=0.0975 piR=0.0240 piI=0.0098 CS=0.1759 TW=0.2097 Omega=0.1999 DI=0.2167 margI=0.0451
+
+LA lam=0: r*=0.4766 piR=0.1073 piI=0.0009 CS=0.0526 TW=0.1608 Omega=0.1073 DI=0.1301 margI=0.0068
+LA lam=0.5: r*=0.3790 piR=0.0964 piI=0.0015 CS=0.0926 TW=0.1904 Omega=0.1427 DI=0.1537 margI=0.0095
+LA lam=0.75: r*=0.2733 piR=0.0715 piI=0.0020 CS=0.1323 TW=0.2058 Omega=0.1707 DI=0.1641 margI=0.0119
+LA lam=0.95: r*=0.1028 piR=0.0258 piI=0.0025 CS=0.1862 TW=0.2145 Omega=0.2027 DI=0.1658 margI=0.0149
+LA lam=1.0: r*=0.0329 piR=0.0077 piI=0.0026 CS=0.2049 TW=0.2152 Omega=0.2126 DI=0.1640 margI=0.0159
+
+Merchant comparison values:
+HM lam=0: piR=0.0995 piI=0.0060 CS=0.0498 Omega=0.0995
+HM lam=0.5: piR=0.0885 piI=0.0080 CS=0.0885 Omega=0.1327
+HM lam=0.75: piR=0.0637 piI=0.0096 CS=0.1274 Omega=0.1592
+HM lam=0.95: piR=0.0181 piI=0.0114 CS=0.1805 Omega=0.1896
+HM lam=1.0: piR=0.0000 piI=0.0119 CS=0.1990 Omega=0.1990
+LM lam=0: piR=0.1063 piI=0.0014 CS=0.0531 Omega=0.1063
+LM lam=0.5: piR=0.0945 piI=0.0019 CS=0.0945 Omega=0.1417
+LM lam=0.75: piR=0.0680 piI=0.0022 CS=0.1360 Omega=0.1700
+LM lam=0.95: piR=0.0193 piI=0.0027 CS=0.1928 Omega=0.2024
+LM lam=1.0: piR=0.0000 piI=0.0028 CS=0.2126 Omega=0.2126
+
+=================== rigid_tables.py
+=== Control-paradox boundaries (rigid commission) ===
+baseline  H: platform prefers agency on [(0.6855, 0.9854)]; consumers prefer merchant above 0.8165; paradox band [(0.8165, 0.9854)]
+baseline  L: platform prefers agency on [(0.7795, 0.9079)]; consumers prefer merchant above 0.835; paradox band [(0.835, 0.9079)]
+r=0.1     H: platform prefers agency on [(0.8566, 1.0)]; consumers prefer merchant above 0.9243; paradox band [(0.9243, 1.0)]
+r=0.1     L: platform prefers agency on [(0.9023, 0.9815)]; consumers prefer merchant above 0.9323; paradox band [(0.9323, 0.9815)]
+r=0.15    H: platform prefers agency on [(0.7776, 1.0)]; consumers prefer merchant above 0.8756; paradox band [(0.8756, 1.0)]
+r=0.15    L: platform prefers agency on [(0.8461, 0.9492)]; consumers prefer merchant above 0.8885; paradox band [(0.8885, 0.9492)]
+r=0.25    H: platform prefers agency on [(0.5742, 0.9414)]; consumers prefer merchant above 0.7431; paradox band [(0.7431, 0.9414)]
+r=0.25    L: platform prefers agency on [(0.6979, 0.8548)]; consumers prefer merchant above 0.7683; paradox band [(0.7683, 0.8548)]
+r=0.3     H: platform prefers agency on [(0.4349, 0.8822)]; consumers prefer merchant above 0.6494; paradox band [(0.6494, 0.8822)]
+r=0.3     L: platform prefers agency on [(0.5945, 0.7852)]; consumers prefer merchant above 0.6827; paradox band [(0.6827, 0.7852)]
+c=0.5     H: platform prefers agency on [(0.8354, 0.9911)]; consumers prefer merchant above 0.8938; paradox band [(0.8938, 0.9911)]
+c=0.5     L: platform prefers agency on [(0.8324, 0.9843)]; consumers prefer merchant above 0.8994; paradox band [(0.8994, 0.9843)]
+c=0.6     H: platform prefers agency on [(0.7713, 0.9885)]; consumers prefer merchant above 0.8591; paradox band [(0.8591, 0.9885)]
+c=0.6     L: platform prefers agency on [(0.8081, 0.9504)]; consumers prefer merchant above 0.8703; paradox band [(0.8703, 0.9504)]
+c=0.8     H: platform prefers agency on [(0.5669, 0.9818)]; consumers prefer merchant above 0.7635; paradox band [(0.7635, 0.9818)]
+c=0.8     L: platform prefers agency on [(0.7451, 0.8535)]; consumers prefer merchant above 0.7914; paradox band [(0.7914, 0.8535)]
+h=1.2     H: platform prefers agency on [(0.7293, 0.9507)]; consumers prefer merchant above 0.8255; paradox band [(0.8255, 0.9507)]
+h=1.2     L: platform prefers agency on [(0.7795, 0.9079)]; consumers prefer merchant above 0.835; paradox band [(0.835, 0.9079)]
+h=1.5     H: platform prefers agency on [(0.5878, 1.0)]; consumers prefer merchant above 0.8002; paradox band [(0.8002, 1.0)]
+h=1.5     L: platform prefers agency on [(0.7795, 0.9079)]; consumers prefer merchant above 0.835; paradox band [(0.835, 0.9079)]
+l=0.8     H: platform prefers agency on [(0.6855, 0.9854)]; consumers prefer merchant above 0.8165; paradox band [(0.8165, 0.9854)]
+l=0.8     L: platform prefers agency on [(0.7326, 0.9507)]; consumers prefer merchant above 0.8238; paradox band [(0.8238, 0.9507)]
+l=0.95    H: platform prefers agency on [(0.6855, 0.9854)]; consumers prefer merchant above 0.8165; paradox band [(0.8165, 0.9854)]
+l=0.95    L: platform prefers agency on [(0.8029, 0.8855)]; consumers prefer merchant above 0.84; paradox band [(0.84, 0.8855)]
+
+=== Tier threshold lambda_hat under rigid agency; win-win threshold cbar; welfare peak ===
+{'variant': 'baseline', 'DeltaA0': np.float64(0.0038), 'DeltaA1': np.float64(-0.0112), 'lambda_hat': [0.1937], 'merchant_prefers': 'L', 'cbar': 0.9091, 'peak_H': np.float64(0.8142), 'peak_L': np.float64(0.9413)}
+{'variant': 'r=0.1', 'DeltaA0': np.float64(0.0051), 'DeltaA1': np.float64(-0.0123), 'lambda_hat': [0.2265], 'merchant_prefers': 'L', 'cbar': 1.0141, 'peak_H': np.float64(0.4936), 'peak_L': np.float64(0.6411)}
+{'variant': 'r=0.15', 'DeltaA0': np.float64(0.0045), 'DeltaA1': np.float64(-0.0117), 'lambda_hat': [0.2151], 'merchant_prefers': 'L', 'cbar': 0.9625, 'peak_H': np.float64(0.6572), 'peak_L': np.float64(0.7947)}
+{'variant': 'r=0.25', 'DeltaA0': np.float64(0.0028), 'DeltaA1': np.float64(-0.0106), 'lambda_hat': [0.1582], 'merchant_prefers': 'L', 'cbar': 0.8541, 'peak_H': np.float64(0.9641), 'peak_L': '1'}
+{'variant': 'r=0.3', 'DeltaA0': np.float64(0.0016), 'DeltaA1': np.float64(-0.0099), 'lambda_hat': [0.1029], 'merchant_prefers': 'L', 'cbar': 0.7977, 'peak_H': '1', 'peak_L': '1'}
+{'variant': 'c=0.5', 'DeltaA0': np.float64(0.0229), 'DeltaA1': np.float64(0.0257), 'lambda_hat': [], 'merchant_prefers': 'H', 'cbar': 0.9091, 'peak_H': np.float64(0.9231), 'peak_L': np.float64(0.4386)}
+{'variant': 'c=0.6', 'DeltaA0': np.float64(0.0124), 'DeltaA1': np.float64(0.0054), 'lambda_hat': [], 'merchant_prefers': 'H', 'cbar': 0.9091, 'peak_H': np.float64(0.8831), 'peak_L': np.float64(0.7236)}
+{'variant': 'c=0.8', 'DeltaA0': np.float64(-0.0031), 'DeltaA1': np.float64(-0.0239), 'lambda_hat': [], 'merchant_prefers': 'L', 'cbar': 0.9091, 'peak_H': np.float64(0.6667), 'peak_L': '1'}
+{'variant': 'h=1.2', 'DeltaA0': np.float64(0.002), 'DeltaA1': np.float64(-0.0059), 'lambda_hat': [0.1966], 'merchant_prefers': 'L', 'cbar': 0.9524, 'peak_H': np.float64(0.8346), 'peak_L': np.float64(0.9413)}
+{'variant': 'h=1.5', 'DeltaA0': np.float64(0.0032), 'DeltaA1': np.float64(-0.0268), 'lambda_hat': [0.089], 'merchant_prefers': 'L', 'cbar': 0.8333, 'peak_H': np.float64(0.7529), 'peak_L': np.float64(0.9413)}
+{'variant': 'l=0.8', 'DeltaA0': np.float64(-0.0022), 'DeltaA1': np.float64(-0.0106), 'lambda_hat': [], 'merchant_prefers': 'L', 'cbar': 0.9091, 'peak_H': np.float64(0.8142), 'peak_L': np.float64(0.9256)}
+{'variant': 'l=0.95', 'DeltaA0': np.float64(0.0075), 'DeltaA1': np.float64(-0.0104), 'lambda_hat': [0.3007], 'merchant_prefers': 'L', 'cbar': 0.9091, 'peak_H': np.float64(0.8142), 'peak_L': np.float64(0.9539)}
+
+=== Flexible regime: r*(lambda) sensitivity ===
+{'variant': 'baseline', 'H_r*_0': np.float64(0.4676), 'H_r*_0.5': np.float64(0.3753), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.4766), 'L_r*_0.5': np.float64(0.379), 'L_r*_1.0': np.float64(0.0329)}
+{'variant': 'c=0.5', 'H_r*_0': np.float64(0.5888), 'H_r*_0.5': np.float64(0.4895), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.5922), 'L_r*_0.5': np.float64(0.4933), 'L_r*_1.0': np.float64(0.0858)}
+{'variant': 'c=0.6', 'H_r*_0': np.float64(0.5257), 'H_r*_0.5': np.float64(0.4284), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.5321), 'L_r*_0.5': np.float64(0.4327), 'L_r*_1.0': np.float64(0.0538)}
+{'variant': 'c=0.8', 'H_r*_0': np.float64(0.4142), 'H_r*_0.5': np.float64(0.3289), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.4252), 'L_r*_0.5': np.float64(0.3312), 'L_r*_1.0': np.float64(0.0189)}
+{'variant': 'h=1.2', 'H_r*_0': np.float64(0.4719), 'H_r*_0.5': np.float64(0.3768), 'H_r*_1.0': np.float64(0.068), 'L_r*_0': np.float64(0.4766), 'L_r*_0.5': np.float64(0.379), 'L_r*_1.0': np.float64(0.0329)}
+{'variant': 'h=1.5', 'H_r*_0': np.float64(0.4603), 'H_r*_0.5': np.float64(0.3744), 'H_r*_1.0': np.float64(0.1496), 'L_r*_0': np.float64(0.4766), 'L_r*_0.5': np.float64(0.379), 'L_r*_1.0': np.float64(0.0329)}
+{'variant': 'l=0.8', 'H_r*_0': np.float64(0.4676), 'H_r*_0.5': np.float64(0.3753), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.4713), 'L_r*_0.5': np.float64(0.3763), 'L_r*_1.0': np.float64(0.069)}
+{'variant': 'l=0.95', 'H_r*_0': np.float64(0.4676), 'H_r*_0.5': np.float64(0.3753), 'H_r*_1.0': np.float64(0.0975), 'L_r*_0': np.float64(0.4791), 'L_r*_0.5': np.float64(0.3807), 'L_r*_1.0': np.float64(0.0159)}
+
+=================== tables_4_5.py
+Table 4. Case | lambda | p_T | p_I | D_T | D_I | pi_R | pi_I | CS | TW
+HM | 0 | 0.946 | 0.701 | 0.185 | 0.114 | 0.0995 | 0.0060 | 0.0498 | 0.1553
+HM | 0.5 | 0.828 | 0.602 | 0.247 | 0.152 | 0.0885 | 0.0080 | 0.0885 | 0.1849
+HM | 1 | 0.592 | 0.403 | 0.370 | 0.228 | 0.0000 | 0.0119 | 0.1990 | 0.2110
+HA | 0 | 0.750 | 0.507 | 0.191 | 0.302 | 0.0609 | 0.0169 | 0.1268 | 0.2046
+HA | 0.5 | 0.727 | 0.498 | 0.238 | 0.264 | 0.0585 | 0.0128 | 0.1343 | 0.2057
+HA | 1 | 0.688 | 0.483 | 0.318 | 0.199 | 0.0499 | 0.0073 | 0.1485 | 0.2058
+LM | 0 | 0.592 | 0.683 | 0.259 | 0.084 | 0.1063 | 0.0014 | 0.0531 | 0.1608
+LM | 0.5 | 0.489 | 0.578 | 0.345 | 0.112 | 0.0945 | 0.0019 | 0.0945 | 0.1908
+LM | 1 | 0.284 | 0.367 | 0.518 | 0.168 | 0.0000 | 0.0028 | 0.2126 | 0.2154
+LA | 0 | 0.393 | 0.465 | 0.286 | 0.277 | 0.0571 | 0.0062 | 0.1467 | 0.2099
+LA | 0.5 | 0.382 | 0.460 | 0.352 | 0.223 | 0.0553 | 0.0040 | 0.1515 | 0.2107
+LA | 1 | 0.365 | 0.451 | 0.459 | 0.136 | 0.0495 | 0.0015 | 0.1601 | 0.2111
+
+Table 5. Case | lambda | r* | p_T | p_I | D_T | D_I | pi_R | pi_I | CS | TW
+HA | 0 | 0.468 | 0.957 | 0.697 | 0.132 | 0.171 | 0.1041 | 0.0036 | 0.0486 | 0.1562
+HA | 0.25 | 0.431 | 0.910 | 0.657 | 0.158 | 0.185 | 0.1026 | 0.0045 | 0.0624 | 0.1695
+HA | 0.5 | 0.375 | 0.848 | 0.606 | 0.194 | 0.200 | 0.0952 | 0.0057 | 0.0831 | 0.1841
+HA | 0.75 | 0.283 | 0.762 | 0.537 | 0.250 | 0.213 | 0.0751 | 0.0075 | 0.1164 | 0.1990
+HA | 1 | 0.098 | 0.634 | 0.438 | 0.345 | 0.217 | 0.0240 | 0.0098 | 0.1759 | 0.2097
+LA | 0 | 0.477 | 0.595 | 0.682 | 0.209 | 0.130 | 0.1073 | 0.0009 | 0.0526 | 0.1608
+LA | 0.25 | 0.439 | 0.552 | 0.637 | 0.245 | 0.142 | 0.1054 | 0.0011 | 0.0684 | 0.1749
+LA | 0.5 | 0.379 | 0.494 | 0.579 | 0.297 | 0.154 | 0.0964 | 0.0015 | 0.0926 | 0.1904
+LA | 0.75 | 0.273 | 0.414 | 0.498 | 0.375 | 0.164 | 0.0715 | 0.0020 | 0.1323 | 0.2058
+LA | 1 | 0.033 | 0.295 | 0.378 | 0.509 | 0.164 | 0.0077 | 0.0026 | 0.2049 | 0.2152
+
+=================== nonuniform2.py
+=== density uniform ===
+H lam=0: ok=True w=0.4025 pT=0.9458 pI=0.7013 DT=0.1850 DI=0.1137 DT/DI=1.6264 piR=0.0995 piI=0.0060 CS=0.0498 Omega=0.0995
+H lam=0.5: ok=True w=0.4025 pT=0.8277 pI=0.6017 DT=0.2467 DI=0.1517 DT/DI=1.6264 piR=0.0885 piI=0.0080 CS=0.0885 Omega=0.1327
+H lam=1.0: ok=True w=0.4025 pT=0.5915 pI=0.4025 DT=0.3700 DI=0.2275 DT/DI=1.6264 piR=0.0000 piI=0.0119 CS=0.1990 Omega=0.1990
+L lam=0: ok=True w=0.3668 pT=0.5918 pI=0.6834 DT=0.2587 DI=0.0838 DT/DI=3.0896 piR=0.1063 piI=0.0014 CS=0.0531 Omega=0.1063
+L lam=0.5: ok=True w=0.3667 pT=0.4890 pI=0.5778 DT=0.3450 DI=0.1117 DT/DI=3.0896 piR=0.0945 piI=0.0019 CS=0.0945 Omega=0.1417
+L lam=1.0: ok=True w=0.3668 pT=0.2835 pI=0.3668 DT=0.5175 DI=0.1675 DT/DI=3.0896 piR=0.0000 piI=0.0028 CS=0.2126 Omega=0.2126
+   Omega^H - Omega^L at lam=0: -0.00676;  CS/piR at lam=0: H 0.500, L 0.500
+   Omega^H - Omega^L at lam=0.5: -0.00901;  CS/piR at lam=0: H 0.500, L 0.500
+   Omega^H - Omega^L at lam=1.0: -0.01352;  CS/piR at lam=0: H 0.500, L 0.500
+=== density inc ===
+H lam=0: ok=True w=0.4009 pT=0.9743 pI=0.7263 DT=0.3166 DI=0.1560 DT/DI=2.0294 piR=0.1719 piI=0.0079 CS=0.0766 Omega=0.1719
+H lam=0.5: ok=True w=0.4004 pT=0.8660 pI=0.6352 DT=0.4078 DI=0.1888 DT/DI=2.1601 piR=0.1563 piI=0.0095 CS=0.1316 Omega=0.2221
+H lam=1.0: ok=True w=0.3994 pT=0.5915 pI=0.3994 DT=0.5900 DI=0.2504 DT/DI=2.3563 piR=0.0000 piI=0.0124 CS=0.3227 Omega=0.3227
+L lam=0: ok=True w=0.3673 pT=0.6226 pI=0.7147 DT=0.3690 DI=0.1524 DT/DI=2.4220 piR=0.1781 piI=0.0026 CS=0.0773 Omega=0.1781
+L lam=0.5: ok=True w=0.3674 pT=0.5316 pI=0.6210 DT=0.4518 DI=0.1994 DT/DI=2.2659 piR=0.1626 piI=0.0035 CS=0.1313 Omega=0.2283
+L lam=1.0: ok=True w=0.3675 pT=0.2835 pI=0.3675 DT=0.6066 DI=0.2942 DT/DI=2.0616 piR=-0.0000 piI=0.0052 CS=0.3283 Omega=0.3283
+   Omega^H - Omega^L at lam=0: -0.00616;  CS/piR at lam=0: H 0.445, L 0.434
+   Omega^H - Omega^L at lam=0.5: -0.00621;  CS/piR at lam=0: H 0.445, L 0.434
+   Omega^H - Omega^L at lam=1.0: -0.00564;  CS/piR at lam=0: H 0.445, L 0.434
+=== density dec ===
+H lam=0: ok=True w=0.4055 pT=0.8277 pI=0.6037 DT=0.0642 DI=0.0929 DT/DI=0.6909 piR=0.0336 piI=0.0052 CS=0.0224 Omega=0.0336
+H lam=0.5: ok=True w=0.3967 pT=0.7332 pI=0.5174 DT=0.0787 DI=0.1542 DT/DI=0.5104 piR=0.0298 piI=0.0072 CS=0.0397 Omega=0.0496
+H lam=1.0: ok=False w=0.3579 pT=0.9595 pI=0.6943 DT=0.0135 DI=0.0800 DT/DI=0.1682 piR=0.0319 piI=0.0006 CS=0.0097 Omega=0.0415
+L lam=0: ok=True w=0.3612 pT=0.4890 pI=0.5741 DT=0.1864 DI=0.0222 DT/DI=8.4076 piR=0.0430 piI=0.0002 CS=0.0287 Omega=0.0430
+L lam=0.5: ok=True w=0.3642 pT=0.4068 pI=0.4913 DT=0.2764 DI=0.0239 DT/DI=11.5558 piR=0.0371 piI=0.0003 CS=0.0495 Omega=0.0619
+L lam=1.0: ok=False w=0.4312 pT=0.2835 pI=0.4312 DT=0.2421 DI=0.2271 DT/DI=1.0663 piR=0.0000 piI=0.0184 CS=0.0928 Omega=0.0928
+   Omega^H - Omega^L at lam=0: -0.00945;  CS/piR at lam=0: H 0.667, L 0.667
+   Omega^H - Omega^L at lam=0.5: -0.01226;  CS/piR at lam=0: H 0.667, L 0.667
+   Omega^H - Omega^L at lam=1.0: -0.05128;  CS/piR at lam=0: H 0.667, L 0.667
+
+=================== extensions_check.py
+w(mu) merchant H: c*(h*mu - 2*h - 2)/(2*(mu - 4))  claimed: c*(h*mu - 2*h - 2)/(2*(mu - 4))
+CS at mu=0,1: 0.04975953124999983 0.0509207291666668  dCS/dmu at 0: 0.0007464843750001268
+incumbent profit at mu=0,1: 0.005971875 0.0053083333333333324
+merchant: dCS/dlam at 0 = 0.04975953124999998  CS(1)= 0.19903812499999993
+agency: dCS/dmu at 0 = 0.023606669531250554  CS(mu=1)= 0.17659432916666754
+agency: dCS/dlam at 0 = 0.011394995624999876  CS(lam=1)= 0.14853934570312452
+incumbent profit zero at mu = 0.800000000000226
+continuous quality, format M, lam=0: q* = 0.847  (Omega=0.0995)
+continuous quality, format M, lam=0.5: q* = 0.847  (Omega=0.1327)
+continuous quality, format M, lam=1.0: q* = 0.847  (Omega=0.1990)
+continuous quality, format A, lam=0: q* = 0.547  (Omega=0.0694)
+continuous quality, format A, lam=0.5: q* = 0.767  (Omega=0.1257)
+continuous quality, format A, lam=1.0: q* = 0.810  (Omega=0.1962)
+
+=================== continuous_quality_flex.py
+flexible, lam=0.0: q* = 0.748, r* = 0.443, Omega = 0.1014
+flexible, lam=0.5: q* = 0.787, r* = 0.352, Omega = 0.1342
+flexible, lam=1.0: q* = 0.839, r* = 0.043, Omega = 0.1991
+
+=================== figures.py
+figures written
+
